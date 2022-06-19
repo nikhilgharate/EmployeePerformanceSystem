@@ -1,0 +1,52 @@
+<?php 
+   
+    error_reporting(0);
+    session_start();
+    require_once("config.php");
+    $db = new dbObj();
+	$conn =  $db->getConnstring();
+if(isset($_REQUEST['username']) && isset($_REQUEST['password'])) {
+extract($_REQUEST);
+    
+	$sql="select * from user where email='$username' and password='$password'";
+	$result = mysqli_query($conn,$sql);
+	if(mysqli_num_rows($result)==1){
+		while($rows=mysqli_fetch_array($result)){
+	
+	if($rows['active']==1){
+
+	
+			
+		$_SESSION['ID']= $rows['ID'];
+		$_SESSION['username']= $rows['user_name'];
+		$_SESSION['email']= $rows['email'];
+		$_SESSION['mobile']= $rows['mobile'];
+		$_SESSION['type']= $rows['type'];
+		$_SESSION['img']= $rows['img'];
+		
+		
+		echo  "<div class='alert alert-success'>Login successfully....</div>";
+
+     //$sql="select * from stock where product_id=";
+
+
+     echo "<script>location='submit_application.php'</script>";
+ }else{
+
+  echo "<div class='alert alert-danger'>User is not Activated - Please Login Admistrator and active this user..</div> ";
+
+
+ }
+
+ 
+	
+		
+}
+
+}else{
+  echo "<div class='alert alert-danger'>Wrong username & Password...</div> ";
+}
+}else{echo " Blank Not Allowed ..";}
+
+
+?>
